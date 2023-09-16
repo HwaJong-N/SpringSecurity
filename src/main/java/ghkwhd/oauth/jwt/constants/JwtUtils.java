@@ -2,10 +2,14 @@ package ghkwhd.oauth.jwt.constants;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import ghkwhd.oauth.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +59,15 @@ public class JwtUtils {
 
 
     // 토큰 유효성 검사 => 여러 예외가 발생함 ( 호출하는 곳에서 처리 필요 )
-    public static void verifyToken(String token) {
-        JWT.require(Algorithm.HMAC512(JwtConstants.SECRET_KEY)).build().verify(token);
+    public static DecodedJWT verifyToken(String token) {
+        return JWT.require(Algorithm.HMAC512(JwtConstants.SECRET_KEY)).build().verify(token);
+    }
+
+    public static UsernamePasswordAuthenticationToken getAuthenticationToken(DecodedJWT decodedJWT) {
+        String id = decodedJWT.getClaim("id").asString();
+        String role = decodedJWT.getClaim("role").asString();
+
+        return new UsernamePasswordAuthenticationToken(id, null,
+                Collections.singleton(new SimpleGrantedAuthority(role)));
     }
 }

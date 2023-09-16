@@ -9,4 +9,9 @@ public class RestApiController {
     public String user() {
         return "user 입니다";
     }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin 입니다";
+    }
 }

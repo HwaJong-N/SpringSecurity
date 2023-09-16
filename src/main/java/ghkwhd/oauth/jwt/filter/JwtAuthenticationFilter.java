@@ -2,10 +2,14 @@ package ghkwhd.oauth.jwt.filter;
 
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ghkwhd.oauth.jwt.constants.JwtConstants;
 import ghkwhd.oauth.jwt.constants.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,15 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static ghkwhd.oauth.jwt.constants.JwtUtils.verifyToken;
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
-import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+import static javax.servlet.http.HttpServletResponse.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String[] whitelist = {"/", "/signUp", "/login"};
+    private static final String[] whitelist = {"/", "/signUp", "/login", "/renew", "/js/**"};
 
     // 필터를 거치지 않을 URL 을 설정하고, true 를 return 하면 바로 다음 필터를 진행하게 됨
     @Override
@@ -50,15 +53,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // 토큰 검증
             String token = JwtUtils.getTokenFromHeader(header);
-            verifyToken(token);
+            DecodedJWT decodedJWT = verifyToken(token);
 
-            // Access Token 갱신 요청인 경우
-//            if (!request.getRequestURI().equals("/renew")) {
-//                // userDetailsService 의 loadUserByUsername 에서 UserDetails 를 받아 UsernamePasswordAuthenticationToken 를 만드는 방법도 있음
-//                // 인터넷을 찾아보니 필요한 권한 정보 같은 것만 들고 있어도 된다고 했음
-//                UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(decodedJWT);
-//                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//            }
+            // Access Token 재발급 요청이 아닌 경우
+            if (!request.getRequestURI().equals("/renew")) {
+                UsernamePasswordAuthenticationToken authenticationToken = JwtUtils.getAuthenticationToken(decodedJWT);
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
 
             // 이거 없으면 다음 실행 안됨!!
             doFilter(request, response, filterChain);
