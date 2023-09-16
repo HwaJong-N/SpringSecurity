@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>회원 가입</h2>
+    </div>
+    <h4 class="mb-3">회원 정보 입력</h4>
+    <form>
+        <div>
+            <label for="id">ID</label>
+            <input type="text" id="id" class="form-control">
+            <p id="error-id" style="color: red"/>
+        </div>
+
+        <div>
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" class="form-control">
+            <p id="error-password" style="color: red"/>
+        </div>
+
+        <div>
+            <label for="name">이름</label>
+            <input type="text" id="name" class="form-control">
+            <p id="error-name" style="color: red"/>
+        </div>
+
+        <div>
+            <label for="name">이메일</label>
+            <input type="text" id="email" class="form-control">
+            <p id="error-email" style="color: red"/>
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" id="sign-up-user" type="button">회원가입</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg" th:onclick="|location.href='@{/}'|" type="button">취소</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" th:src="@{/js/member/signUp.js}"></script>
+
+</body>
+</html>
