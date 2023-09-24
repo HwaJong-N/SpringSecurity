@@ -1,4 +1,4 @@
-package ghkwhd.oauth.config;
+package ghkwhd.oauth.common.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

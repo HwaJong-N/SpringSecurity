@@ -1,4 +1,4 @@
-package ghkwhd.oauth.interceptor;
+package ghkwhd.oauth.common.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ghkwhd.oauth.member.domain.MemberRole;

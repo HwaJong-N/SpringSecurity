@@ -16,4 +16,7 @@ public class MemberDTO {
     @NotBlank
     @Email
     private String email;
+    // OAuth2 최초 로그인 후 회원가입 시 필요한 정보
+    private String socialType;
+    private String socialId;
 }

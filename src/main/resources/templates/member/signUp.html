@@ -37,8 +37,17 @@
 
         <div>
             <label for="name">이메일</label>
-            <input type="text" id="email" class="form-control">
+            <!-- model 을 통해 email 이 전달되면 input 에 표시 및 readOnly 설정 -->
+            <!-- 단> 카카오는 email 이 전달되지 않아서 빈값도 확인 -->
+            <input type="text" id="email" class="form-control" th:value="${email}"
+                   th:readonly="${email != null && email != '' ? 'readonly': false}">
             <p id="error-email" style="color: red"/>
+        </div>
+
+        <!-- OAuth2 최초 로그인 후 회원가입 시, socialType, socialId 정보를 DB 에 기록해야함 -->
+        <div>
+            <input type="text" id="socialType" class="form-control" th:value="${socialType}" hidden="hidden">
+            <input type="text" id="socialId" class="form-control" th:value="${socialId}" hidden="hidden">
         </div>
 
         <hr class="my-4">

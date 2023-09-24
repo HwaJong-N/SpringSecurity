@@ -1,6 +1,5 @@
 package ghkwhd.oauth.jwt.filter;
 
-
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +26,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String[] whitelist = {"/", "/signUp", "/login", "/renew", "/js/**"};
+    private static final String[] whitelist = {"/", "/login", "/loginHome", "/signUp", "/renew", "/loginSuccess",
+                                            "/login/oauth2/code/**", "/oauth2/signUp", "/error", "/js/**"};
 
     // 필터를 거치지 않을 URL 을 설정하고, true 를 return 하면 바로 다음 필터를 진행하게 됨
     @Override
@@ -55,11 +55,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = JwtUtils.getTokenFromHeader(header);
             DecodedJWT decodedJWT = verifyToken(token);
 
-            // Access Token 재발급 요청이 아닌 경우
-            if (!request.getRequestURI().equals("/renew")) {
-                UsernamePasswordAuthenticationToken authenticationToken = JwtUtils.getAuthenticationToken(decodedJWT);
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+            UsernamePasswordAuthenticationToken authenticationToken = JwtUtils.getAuthenticationToken(decodedJWT);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
             // 이거 없으면 다음 실행 안됨!!
             doFilter(request, response, filterChain);

@@ -8,7 +8,9 @@ signUpUser.addEventListener("click", () => {
         id: document.querySelector("#id").value,
         password: document.querySelector("#password").value,
         name: document.querySelector("#name").value,
-        email: document.querySelector("#email").value
+        email: document.querySelector("#email").value,
+        socialType: document.querySelector("#socialType").value,
+        socialId: document.querySelector("#socialId").value
     }
 
     // RestAPI 호출

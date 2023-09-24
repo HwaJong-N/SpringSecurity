@@ -2,6 +2,7 @@ package ghkwhd.oauth.member.service;
 
 import ghkwhd.oauth.member.domain.Member;
 import ghkwhd.oauth.member.domain.MemberDTO;
+import ghkwhd.oauth.member.domain.SocialType;
 import ghkwhd.oauth.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,14 @@ public class MemberService {
 
     public Optional<Member> findById(String id) {
         return memberRepository.findById(id);
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+    public Optional<Member> findBySocialTypeAndSocialId(SocialType socialType, String socialId) {
+        return memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
     }
 
 }

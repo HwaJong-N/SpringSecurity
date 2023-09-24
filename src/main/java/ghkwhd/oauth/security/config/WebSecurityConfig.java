@@ -1,6 +1,10 @@
 package ghkwhd.oauth.security.config;
 
 import ghkwhd.oauth.jwt.service.JwtService;
+import ghkwhd.oauth.member.service.MemberService;
+import ghkwhd.oauth.oauth2.handler.CustomOAuth2LoginFailureHandler;
+import ghkwhd.oauth.oauth2.handler.CustomOAuth2LoginSuccessHandler;
+import ghkwhd.oauth.oauth2.service.OAuth2UserServiceImpl;
 import ghkwhd.oauth.security.filter.CustomAuthenticationFilter;
 import ghkwhd.oauth.security.handler.CustomLoginFailureHandler;
 import ghkwhd.oauth.security.handler.CustomLoginSuccessHandler;
@@ -21,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
+    private final OAuth2UserServiceImpl oauth2UserService;
     private final JwtService jwtService;
 
     @Bean
@@ -54,6 +59,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomLoginFailureHandler();
     }
 
+    @Bean
+    public CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler() {
+        return new CustomOAuth2LoginSuccessHandler(jwtService);
+    }
+
+    @Bean
+    public CustomOAuth2LoginFailureHandler customOAuth2LoginFailureHandler() {
+        return new CustomOAuth2LoginFailureHandler();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.authenticationProvider(customAuthenticationProvider());
@@ -61,15 +76,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-                //.antMatchers("/", "/signUp", "/login", "/js/**").permitAll()
-                //.anyRequest().authenticated()
-                .anyRequest().permitAll()
-                .and()
-                // 토큰을 사용하기 때문에 세션을 STATELESS 로 설정
+        http.authorizeRequests()
+                        .anyRequest().permitAll()
+             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .formLogin().disable() // form 로그인 비활성화
-                .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+             .and()
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .logout().logoutSuccessUrl("/")
+             .and()
+                 .oauth2Login().userInfoEndpoint().userService(oauth2UserService)   // 구현한 OAuth2UserService 등록
+             .and()
+                .successHandler(customOAuth2LoginSuccessHandler())  // 로그인 성공 핸들러 등록
+                .failureHandler(customOAuth2LoginFailureHandler());
     }
 }

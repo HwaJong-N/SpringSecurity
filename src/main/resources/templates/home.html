@@ -4,6 +4,16 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <style>
+    .div_box {
+      position: absolute;
+      width: 300px;
+      height: 100px;
+      top: 40%;
+      left: 44%;
+      margin: -50px 0 0 -50px;
+    }
+  </style>
 </head>
 <body>
 <div class="container" style="max-width: 600px">
@@ -23,6 +33,17 @@
     </div>
   </div>
   <hr class="my-4">
+</div>
+<div class="div_box">
+  <div style="height: 60px">
+    <button class="btn-lg" style="background: #FEE500; width: 300px" onclick="location.href='/oauth2/authorization/kakao'">Kakao 로그인</button>
+  </div>
+  <div style="height: 60px">
+    <button class="btn-lg" style="background: #03C75A; width: 300px" onclick="location.href='/oauth2/authorization/naver'">Naver 로그인</button><br/>
+  </div>
+  <div style="height: 60px">
+    <button class="btn-lg" style="background: #4285F4; width: 300px" onclick="location.href='/oauth2/authorization/google'">Google 로그인</button><br/>
+  </div>
 </div>
 </body>
 </html>

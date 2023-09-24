@@ -1,6 +1,7 @@
 package ghkwhd.oauth.member.repository;
 
 import ghkwhd.oauth.member.domain.Member;
+import ghkwhd.oauth.member.domain.SocialType;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,28 @@ public class MemberRepository {
     public Optional<Member> findById(String id) {
         String jpql = "select u from Member u where u.id=:id";
         TypedQuery<Member> query = em.createQuery(jpql, Member.class).setParameter("id", id);
+        List<Member> MemberList = query.getResultList();
+        if (MemberList.size() == 0) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(MemberList.get(0));
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        String jpql = "select u from Member u where u.email=:email";
+        TypedQuery<Member> query = em.createQuery(jpql, Member.class).setParameter("email", email);
+        List<Member> MemberList = query.getResultList();
+        if (MemberList.size() == 0) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(MemberList.get(0));
+    }
+
+    public Optional<Member> findBySocialTypeAndSocialId(SocialType socialType, String socialId) {
+        String jpql = "select u from Member u where u.socialType=:socialType and u.socialId=:socialId";
+        TypedQuery<Member> query = em.createQuery(jpql, Member.class)
+                                    .setParameter("socialType", socialType)
+                                    .setParameter("socialId", socialId);
         List<Member> MemberList = query.getResultList();
         if (MemberList.size() == 0) {
             return Optional.empty();
