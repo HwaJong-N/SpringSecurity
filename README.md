@@ -1,5 +1,12 @@
 # SpringSecurity
 
+
+> 스프링부트 3.0 이상 버전은 해당 <a href="https://github.com/HwaJong-N/Spring-Security-JWT-OAuth2.0">Repository</a>에서 확인할 수 있습니다.
+
+
+<br>
+
+
 ## 회원가입
 
 ![Animation_회원가입](https://github.com/HwaJong-N/SpringSecurity/assets/112313795/2c91e0c4-bf30-4f56-acfb-058b1b07f025)
